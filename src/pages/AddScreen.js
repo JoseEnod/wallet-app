@@ -11,27 +11,31 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import TextInput from 'react-native-paper/src/components/TextInput/TextInput';
+
 import Header from '../componets/Header';
 import Container from '../componets/ContainerMain';
+import defaultData from '../data/default';
 
 
 const MainScreen = () => {
+  const navigation = useNavigation();
+
   const [name, setName] = useState('');
   const [date, setDate] = useState(new Date());
   const [value, setValue] = useState('');
   const [addOrremove, setAddOrRemove] = useState(false);
-  const [type, setType] = useState('');
+  const [categorieSelected, setCategorieSelected] = useState('');
 
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
-  const navigation = useNavigation();
-
   var dia = date.getDate();
-  var mes = (date.getMonth() + 1);
+  var mes = date.getMonth();
   var ano = date.getFullYear();
-  var dataBR = dia + '/' + mes + '/' + ano;
+  var dataBR = dia + '/' + (mes + 1) + '/' + ano;
+
+  const expenseCategorie = defaultData.expenseCategories;
 
   const data = [70, 40, 20, 80, 50, 90, 70, 80]; //Min 20, Max 90
 
@@ -62,6 +66,32 @@ const MainScreen = () => {
       setShowModal(false);
     else
       setShowModal(true);
+  }
+
+  const selectCategorie = (categorie) => {
+    setCategorieSelected(categorie);
+    setShowModal(false);
+  }
+
+  const saveData = () => {
+    let finalValue = value;
+
+    if (value <= 0 && addOrremove) {
+      finalValue = (finalValue *= -1);
+    } else if (value >= 0 && addOrremove === false) {
+      finalValue = (finalValue *= -1);
+    }
+
+    const dataInfo = {
+      name,
+      date: dataBR,
+      value: finalValue,
+      categorieSelected,
+    };
+
+    console.log(dataInfo);
+
+    navigation.goBack();
   }
 
   return (
@@ -125,7 +155,6 @@ const MainScreen = () => {
                 <View style={styles.positiveOrNegativeButton}>
                   <Text style={styles.addButtonText}>
                     R$ +
-
                   </Text>
                 </View>) : (
                   <View style={[styles.positiveOrNegativeButton,
@@ -140,7 +169,8 @@ const MainScreen = () => {
             onPress={showAndHideModal}>
             <View style={styles.selectButton}>
               <Text style={styles.addButtonText}>
-                Selecione
+                {categorieSelected !== '' ?
+                  categorieSelected : 'Selecione'}
               </Text>
             </View>
           </TouchableNativeFeedback>
@@ -151,17 +181,25 @@ const MainScreen = () => {
         transparent={true}
         animationType="slide">
         <View style={styles.modalView}>
-          <Text>
-            Selecione o tipo de gasto
+          <Text style={styles.titleModal}>
+            Categoria do gasto
             </Text>
-          <TouchableNativeFeedback
-            onPress={showAndHideModal}>
-            <View style={styles.dateButton}>
-              <Text style={styles.addButtonText}>
-                Fechar Modal
-              </Text>
-            </View>
-          </TouchableNativeFeedback>
+          {expenseCategorie.map(categorie => {
+            return (
+              <TouchableNativeFeedback
+                key={`${categorie.name}-${categorie.color}`}
+                onPress={() => selectCategorie(categorie.name)}>
+                <View style={[
+                  styles.modalButton,
+                  { backgroundColor: categorie.color }
+                ]}>
+                  <Text style={styles.addButtonText}>
+                    {categorie.name}
+                  </Text>
+                </View>
+              </TouchableNativeFeedback>
+            )
+          })}
         </View>
       </Modal>
       <View style={styles.buttons}>
@@ -174,7 +212,7 @@ const MainScreen = () => {
           </View>
         </TouchableNativeFeedback>
         <TouchableNativeFeedback
-          onPress={() => { navigation.goBack(); }}>
+          onPress={saveData}>
           <View style={[styles.button, { backgroundColor: '#00CD15' }]}>
             <Text style={styles.addButtonText}>
               Adicionar
@@ -223,16 +261,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  modalButton: {
-    backgroundColor: '#78FF86',
-    borderRadius: 20,
-  },
   modalView: {
+    height: '90%',
     margin: 20,
-    marginTop: '50%',
     backgroundColor: "white",
     borderRadius: 20,
-    padding: 35,
+    padding: 10,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
@@ -242,6 +276,19 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 15
+  },
+  titleModal: {
+    fontSize: 19,
+    fontWeight: 'bold',
+    marginVertical: 10,
+  },
+  modalButton: {
+    height: 45,
+    width: '90%',
+    borderRadius: 13,
+    marginVertical: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   positiveOrNegativeButton: {
     width: '30%',
