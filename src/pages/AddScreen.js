@@ -8,6 +8,7 @@ import {
   Modal,
   Button
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import TextInput from 'react-native-paper/src/components/TextInput/TextInput';
@@ -15,6 +16,7 @@ import TextInput from 'react-native-paper/src/components/TextInput/TextInput';
 import Header from '../componets/Header';
 import Container from '../componets/ContainerMain';
 import defaultData from '../data/default';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 
 const MainScreen = () => {
@@ -36,8 +38,6 @@ const MainScreen = () => {
   var dataBR = dia + '/' + (mes + 1) + '/' + ano;
 
   const expenseCategorie = defaultData.expenseCategories;
-
-  const data = [70, 40, 20, 80, 50, 90, 70, 80]; //Min 20, Max 90
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -73,7 +73,25 @@ const MainScreen = () => {
     setShowModal(false);
   }
 
-  const saveData = () => {
+  const getStorage = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('@itensData');
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch (e) {
+      alert('Houve um erro ao receber os dados!');
+    }
+  }
+
+  const saveInStorage = async (valueForSave) => {
+    try {
+      const jsonValue = JSON.stringify(valueForSave)
+      await AsyncStorage.setItem('@itensData', jsonValue);
+    } catch (e) {
+      alert('Houve um erro ao salvar os dados!');
+    }
+  }
+
+  const saveData = async () => {
     let finalValue = value;
 
     if (value <= 0 && addOrremove) {
@@ -82,12 +100,18 @@ const MainScreen = () => {
       finalValue = (finalValue *= -1);
     }
 
-    const dataInfo = {
+    const getData = await getStorage();
+
+    let dataInfo = await (getData != null ? getData : []);
+
+    dataInfo.push({
       name,
       date: dataBR,
       value: finalValue,
-      categorieSelected,
-    };
+      categoria: categorieSelected,
+    });
+
+    saveInStorage(dataInfo);
 
     console.log(dataInfo);
 
@@ -97,7 +121,7 @@ const MainScreen = () => {
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor='#3FCC4D' />
-      <Header data={data} />
+      <Header />
       <Container
         style={styles.formContainer}
       >
@@ -144,6 +168,7 @@ const MainScreen = () => {
             label={addOrremove ? 'R$ +' : 'R$ -'}
             mode='outlined'
             value={value}
+            keyboardType='numeric'
             onChangeText={text => setValue(text)}
           />
         </View>

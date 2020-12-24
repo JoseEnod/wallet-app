@@ -4,7 +4,9 @@ import { View, Text, StyleSheet, } from 'react-native';
 import { AreaChart } from 'react-native-svg-charts';
 import * as shape from 'd3-shape';
 
-const Header = (props) => {
+const Header = () => {
+  const data = [70, 40, 20, 80, 50, 90, 20, 80]; //Min 20, Max 90
+
   return (
     <>
       <View style={styles.containerHead} >
@@ -12,7 +14,7 @@ const Header = (props) => {
       </View>
       <AreaChart
         style={{ height: 80, marginTop: -55, width: '100%' }}
-        data={props.data}
+        data={data}
         contentInset={{ top: 30, bottom: 30 }}
         curve={shape.curveNatural}
         svg={{ fill: '#FFF' }}

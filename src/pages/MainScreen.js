@@ -7,8 +7,9 @@ import {
   StatusBar,
   ScrollView,
 } from 'react-native';
-import { PieChart } from 'react-native-svg-charts';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import { PieChart } from 'react-native-svg-charts';
 
 import Header from '../componets/Header';
 import Container from '../componets/ContainerMain';
@@ -60,10 +61,8 @@ const MainScreen = () => {
       value: 83.8,
       date: '13/02/2020'
     },
-
   ]
 
-  const data = [70, 40, 20, 80, 50, 90, 70, 80]; //Min 20, Max 90
   const pieData = [
     {
       value: 50.5,
@@ -96,10 +95,20 @@ const MainScreen = () => {
   ];
 
 
+  const getStorage = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('@itensData');
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch (e) {
+      alert('Houve um erro ao receber os dados!');
+    }
+  }
+
+
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor='#3FCC4D' />
-      <Header data={data} />
+      <Header />
       <Container
         title='Categorias'
         style={styles.container1}
@@ -141,6 +150,14 @@ const MainScreen = () => {
         }}>
         <View style={styles.addButton}>
           <Text style={styles.addButtonText}>+</Text>
+        </View>
+      </TouchableNativeFeedback>
+      <TouchableNativeFeedback
+        onPress={async () => {
+          console.log(await getStorage());
+        }}>
+        <View style={styles.addButton}>
+          <Text style={styles.addButtonText}>C.l</Text>
         </View>
       </TouchableNativeFeedback>
       <View style={styles.storyList}>
