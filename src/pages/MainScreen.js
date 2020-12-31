@@ -66,44 +66,6 @@ const MainScreen = () => {
       }
     })
 
-  // console.log(Object.keys(totalCategories).length);
-  // console.log(totalCategories);
-  // console.log(pieData);
-
-  // const reduz = pie.length - 4;
-  // pie.splice(0, reduz);
-
-  // const pieData = [
-  //   {
-  //     value: 50.5,
-  //     svg: {
-  //       fill: '#8DEDFF',
-  //     },
-  //     key: 'Comida',
-  //   },
-  //   {
-  //     value: 40.2,
-  //     svg: {
-  //       fill: '#FCFF5A',
-  //     },
-  //     key: 'Internet',
-  //   },
-  //   {
-  //     value: 10.1,
-  //     svg: {
-  //       fill: '#FF26E6',
-  //     },
-  //     key: 'Energia',
-  //   },
-  //   {
-  //     value: 10.1,
-  //     svg: {
-  //       fill: '#78FF86',
-  //     },
-  //     key: 'Outros',
-  //   },
-  // ];
-
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor='#3FCC4D' />
@@ -123,7 +85,7 @@ const MainScreen = () => {
           />
           <View
             style={styles.list}>
-            {pieData.map((data, index) => {
+            {pieData.slice(0).reverse().map((data, index) => {
               return (
                 <View
                   key={data.key}

@@ -7,6 +7,7 @@ import { AreaChart } from 'react-native-svg-charts';
 import * as shape from 'd3-shape';
 
 const Header = () => {
+  const [values, setValues] = useState([0]);
   const [totalValue, setTotalValue] = useState(0);
 
   const getStorage = async () => {
@@ -21,16 +22,34 @@ const Header = () => {
   useFocusEffect(() => {
     getStorage().then((data) => {
       if (data !== null) {
-        let total = data.reduce((soma, atual) => {
-          return Number(soma) + Number(atual.value)
+        const dataValues = data.map((data) => {
+          return Number(data.value);
         }, []);
 
-        setTotalValue(total);
+        setValues(dataValues.map((data) => {
+
+          if (data < 0) {
+            data = (data *= -1);
+          }
+
+          if (data >= 900) {
+            data = 90;
+          } else if (data >= 300) {
+            data /= 10;
+          } else {
+            data /= 10;
+            data += 20;
+          }
+
+          return Number(data); //Min 20, Max 90
+        }));
+
+        setTotalValue(
+          dataValues.reduce((total, atual) =>
+            Number(total) + Number(atual)))
       }
     })
   });
-
-  const data = [70, 40, 20, 80, 50, 90, 20, 80]; //Min 20, Max 90
 
   return (
     <>
@@ -39,7 +58,7 @@ const Header = () => {
       </View>
       <AreaChart
         style={{ height: 80, marginTop: -55, width: '100%' }}
-        data={data}
+        data={values.length > 2 ? values : [0]}
         contentInset={{ top: 30, bottom: 30 }}
         curve={shape.curveNatural}
         svg={{ fill: '#FFF' }}
