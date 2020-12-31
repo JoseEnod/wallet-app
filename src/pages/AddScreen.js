@@ -6,7 +6,6 @@ import {
   TouchableNativeFeedback,
   StatusBar,
   Modal,
-  Button
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
@@ -16,7 +15,6 @@ import TextInput from 'react-native-paper/src/components/TextInput/TextInput';
 import Header from '../componets/Header';
 import Container from '../componets/ContainerMain';
 import defaultData from '../data/default';
-import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 
 const MainScreen = () => {
@@ -37,7 +35,7 @@ const MainScreen = () => {
   var ano = date.getFullYear();
   var dataBR = dia + '/' + (mes + 1) + '/' + ano;
 
-  const expenseCategorie = defaultData.expenseCategories;
+  const categories = defaultData.categories;
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -107,13 +105,13 @@ const MainScreen = () => {
     dataInfo.push({
       name,
       date: dataBR,
-      value: finalValue,
+      value: Number(finalValue),
       categoria: categorieSelected,
     });
 
     saveInStorage(dataInfo);
 
-    console.log(dataInfo);
+    console.log(dataInfo, finalValue);
 
     navigation.goBack();
   }
@@ -209,7 +207,7 @@ const MainScreen = () => {
           <Text style={styles.titleModal}>
             Categoria do gasto
             </Text>
-          {expenseCategorie.map(categorie => {
+          {categories.map(categorie => {
             return (
               <TouchableNativeFeedback
                 key={`${categorie.name}-${categorie.color}`}

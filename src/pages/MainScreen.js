@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -8,92 +8,19 @@ import {
   ScrollView,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { PieChart } from 'react-native-svg-charts';
 
 import Header from '../componets/Header';
 import Container from '../componets/ContainerMain';
+import defaultData from '../data/default';
 
 const MainScreen = () => {
   const navigation = useNavigation();
+  const [data, setData] = useState([]);
+  const [isLoad, setIsLoad] = useState(true);
 
-  const colors = {
-    Comida: '#8DEDFF',
-    Internet: '#FCFF5A',
-    Energia: '#FF26E6',
-    Outros: '#78FF86',
-  }
-
-  const dataItens = [
-    {
-      key: 'Comida',
-      name: 'Pastelzim',
-      value: 13.5,
-      date: '10/02/2021'
-    },
-    {
-      key: 'Internet',
-      name: 'Boleto da net',
-      value: 95.1,
-      date: '15/05/2020'
-    },
-    {
-      key: 'Energia',
-      name: 'Boleto da Luz',
-      value: 83.8,
-      date: '13/02/2020'
-    },
-    {
-      key: 'Comida',
-      name: 'Pastelzi',
-      value: 13.5,
-      date: '10/02/2021'
-    },
-    {
-      key: 'Internet',
-      name: 'Boleto da n',
-      value: 95.1,
-      date: '15/05/2020'
-    },
-    {
-      key: 'Energia',
-      name: 'Boleto da L',
-      value: 83.8,
-      date: '13/02/2020'
-    },
-  ]
-
-  const pieData = [
-    {
-      value: 50.5,
-      svg: {
-        fill: '#8DEDFF',
-      },
-      key: 'Comida',
-    },
-    {
-      value: 40.2,
-      svg: {
-        fill: '#FCFF5A',
-      },
-      key: 'Internet',
-    },
-    {
-      value: 10.1,
-      svg: {
-        fill: '#FF26E6',
-      },
-      key: 'Energia',
-    },
-    {
-      value: 10.1,
-      svg: {
-        fill: '#78FF86',
-      },
-      key: 'Outros',
-    },
-  ];
-
+  const colors = defaultData.colorsMainPage;
 
   const getStorage = async () => {
     try {
@@ -104,6 +31,78 @@ const MainScreen = () => {
     }
   }
 
+  useFocusEffect(() => {
+    getStorage().then((data) => {
+      if (data !== null) {
+        setData(data);
+        setIsLoad(false);
+      }
+    })
+  });
+
+  const totalCategories = {};
+
+  const pie = data.map((dataAtual) => {
+    if (totalCategories[dataAtual.categoria] == undefined) {
+      totalCategories[dataAtual.categoria] = 0;
+    }
+
+    totalCategories[dataAtual.categoria] += dataAtual.value;
+  });
+
+  const pieData =
+    Object.keys(totalCategories).map((key, index) => {
+
+      if (totalCategories[key] < 0) {
+        totalCategories[key] = (totalCategories[key] *= -1);
+      }
+
+      return {
+        value: totalCategories[key],
+        svg: {
+          fill: colors[key],
+        },
+        key: key,
+      }
+    })
+
+  // console.log(Object.keys(totalCategories).length);
+  // console.log(totalCategories);
+  // console.log(pieData);
+
+  // const reduz = pie.length - 4;
+  // pie.splice(0, reduz);
+
+  // const pieData = [
+  //   {
+  //     value: 50.5,
+  //     svg: {
+  //       fill: '#8DEDFF',
+  //     },
+  //     key: 'Comida',
+  //   },
+  //   {
+  //     value: 40.2,
+  //     svg: {
+  //       fill: '#FCFF5A',
+  //     },
+  //     key: 'Internet',
+  //   },
+  //   {
+  //     value: 10.1,
+  //     svg: {
+  //       fill: '#FF26E6',
+  //     },
+  //     key: 'Energia',
+  //   },
+  //   {
+  //     value: 10.1,
+  //     svg: {
+  //       fill: '#78FF86',
+  //     },
+  //     key: 'Outros',
+  //   },
+  // ];
 
   return (
     <View style={styles.container}>
@@ -152,44 +151,42 @@ const MainScreen = () => {
           <Text style={styles.addButtonText}>+</Text>
         </View>
       </TouchableNativeFeedback>
-      <TouchableNativeFeedback
-        onPress={async () => {
-          console.log(await getStorage());
-        }}>
-        <View style={styles.addButton}>
-          <Text style={styles.addButtonText}>C.l</Text>
-        </View>
-      </TouchableNativeFeedback>
       <View style={styles.storyList}>
         <Text style={styles.titleList2}>Últimos lançamentos</Text>
         <ScrollView>
           <View
             style={styles.list}>
-            {dataItens.map((data, index) => {
-              return (
-                <View key={`${data.name}-${data.date}-${data.value}`}>
-                  <View
-                    style={styles.itensListBlock2}>
-                    <View style={styles.itensAndColorsBlock2}>
-                      <View
-                        style={[
-                          styles.miniCircle,
-                          { backgroundColor: colors[data.key] }
-                        ]}
-                      />
-                      <Text style={styles.itemNameBlock2}>{data.name}</Text>
+            {isLoad ?
+              (<View>
+                <Text>
+                  Começe a adicionar suas compras
+                </Text>
+              </View>) :
+              data.slice(0).reverse().map((data, index) => {
+                return (
+                  <View key={`${data.name}-${data.date}-${data.value}-${index}`}>
+                    <View
+                      style={styles.itensListBlock2}>
+                      <View style={styles.itensAndColorsBlock2}>
+                        <View
+                          style={[
+                            styles.miniCircle,
+                            { backgroundColor: colors[data.categoria] }
+                          ]}
+                        />
+                        <Text style={styles.itemNameBlock2}>{data.name}</Text>
+                      </View>
+                      <Text style={styles.numberValuePie}>
+                        R$ {String(data.value).replace('.', ',')}
+                      </Text>
                     </View>
-                    <Text style={styles.numberValuePie}>
-                      R${String(data.value).replace('.', ',')}
-                    </Text>
+                    <View style={styles.itensAndColorsBlock2}>
+                      <View style={styles.divisorValues} />
+                      <Text style={styles.dateBlock2}>{data.date}</Text>
+                    </View>
                   </View>
-                  <View style={styles.itensAndColorsBlock2}>
-                    <View style={styles.divisorValues} />
-                    <Text style={styles.dateBlock2}>{data.date}</Text>
-                  </View>
-                </View>
-              );
-            })}
+                );
+              })}
           </View>
         </ScrollView>
       </View>
