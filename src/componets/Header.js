@@ -21,8 +21,11 @@ const Header = () => {
 
   useFocusEffect(() => {
     getStorage().then((data) => {
-      if (data !== null) {
+      if (data !== null && data !== undefined) {
         const dataValues = data.map((data) => {
+          if (Number(data.value) === NaN)
+            data.value = 0;
+
           return Number(data.value);
         }, []);
 

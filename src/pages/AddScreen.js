@@ -190,7 +190,9 @@ const MainScreen = () => {
           </TouchableNativeFeedback>
           <TouchableNativeFeedback
             onPress={showAndHideModal}>
-            <View style={styles.selectButton}>
+            <View style={[styles.selectButton,
+            categorieSelected !== '' ?
+              { backgroundColor: defaultData.colorsMainPage[categorieSelected] } : '']}>
               <Text style={styles.addButtonText}>
                 {categorieSelected !== '' ?
                   categorieSelected : 'Selecione'}

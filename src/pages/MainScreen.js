@@ -76,32 +76,46 @@ const MainScreen = () => {
         more={true}
       >
         <View style={styles.dataPieRow} >
-          <PieChart
-            style={styles.pieChart}
-            data={pieData}
-            outerRadius={'100%'}
-            innerRadius={'80%'}
-            padAngle={0.02}
-          />
+          {isLoad ?
+            (<PieChart
+              style={styles.pieChart}
+              data={defaultData.pieChart}
+              outerRadius={'100%'}
+              innerRadius={'80%'}
+              padAngle={0.02}
+            />) :
+            (<PieChart
+              style={styles.pieChart}
+              data={pieData}
+              outerRadius={'100%'}
+              innerRadius={'80%'}
+              padAngle={0.02}
+            />)}
           <View
             style={styles.list}>
-            {pieData.slice(0).reverse().map((data, index) => {
-              return (
-                <View
-                  key={data.key}
-                  style={styles.itensList}>
+            {isLoad ?
+              (<View>
+                <Text>
+                  Adiciones seus {'\n'}gastos e ganhos!
+                </Text>
+              </View>) :
+              pieData.slice(0).reverse().map((data, index) => {
+                return (
                   <View
-                    style={
-                      [styles.miniCircle, { backgroundColor: data.svg.fill }]
-                    }
-                  />
-                  <Text>{data.key}</Text>
-                  <Text style={styles.numberValuePie}>
-                    R${String(data.value).replace('.', ',')}
-                  </Text>
-                </View>
-              );
-            })}
+                    key={data.key}
+                    style={styles.itensList}>
+                    <View
+                      style={
+                        [styles.miniCircle, { backgroundColor: data.svg.fill }]
+                      }
+                    />
+                    <Text>{data.key}</Text>
+                    <Text style={styles.numberValuePie}>
+                      R${String(data.value).replace('.', ',')}
+                    </Text>
+                  </View>
+                );
+              })}
           </View>
         </View>
       </Container>
@@ -121,7 +135,7 @@ const MainScreen = () => {
             {isLoad ?
               (<View>
                 <Text>
-                  Começe a adicionar suas compras
+                  Começe a adicionar seus gastos e ganhos!
                 </Text>
               </View>) :
               data.slice(0).reverse().map((data, index) => {
