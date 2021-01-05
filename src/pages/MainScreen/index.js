@@ -140,7 +140,8 @@ const MainScreen = () => {
               </View>) :
               data.slice(0).reverse().map((data, index) => {
                 return (
-                  <View key={`${data.name}-${data.date}-${data.value}-${index}`}>
+                  <View
+                    key={`${data.name}-${data.date}-${data.value}-${index}`}>
                     <View
                       style={styles.itensListBlock2}>
                       <View style={styles.itensAndColorsBlock2}>
