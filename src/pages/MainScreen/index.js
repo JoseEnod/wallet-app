@@ -110,7 +110,8 @@ const MainScreen = () => {
                       }
                     />
                     <Text>{data.key}</Text>
-                    <Text style={styles.numberValuePie}>
+                    <Text
+                      style={styles.numberValuePie}>
                       R${String(data.value.toFixed(2)).replace('.', ',')}
                     </Text>
                   </View>
