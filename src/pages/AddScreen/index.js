@@ -12,9 +12,9 @@ import { useNavigation } from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import TextInput from 'react-native-paper/src/components/TextInput/TextInput';
 
-import Header from '../componets/Header';
-import Container from '../componets/ContainerMain';
-import defaultData from '../data/default';
+import Header from '../../componets/Header';
+import Container from '../../componets/ContainerMain';
+import defaultData from '../../data/default';
 
 
 const MainScreen = () => {

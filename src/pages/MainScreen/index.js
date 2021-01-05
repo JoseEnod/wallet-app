@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -11,9 +11,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { PieChart } from 'react-native-svg-charts';
 
-import Header from '../componets/Header';
-import Container from '../componets/ContainerMain';
-import defaultData from '../data/default';
+import Header from '../../componets/Header';
+import Container from '../../componets/ContainerMain';
+import defaultData from '../../data/default';
 
 const MainScreen = () => {
   const navigation = useNavigation();
