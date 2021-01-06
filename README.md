@@ -7,9 +7,9 @@
 <br>
 
 <p align="center">
-  <img alt="Open App" src=".github/open.gif" width="25%">
-  <img alt="Add" src=".github/add_gasto.gif" width="25%">
-  <img alt="Geral app" src=".github/list.gif" width="25%">
+  <img alt="Open App" src=".github/open.gif" width="27%">
+  <img alt="Add" src=".github/add_gasto.gif" width="27%" margin-left="5%" margin-right="5%">
+  <img alt="Geral app" src=".github/list.gif" width="27%">
 </p>
 
 ## 🚀 Tecnologias
@@ -17,6 +17,10 @@
 Esse projeto foi desenvolvido com as seguintes tecnologias:
 
 - [React Native](https://facebook.github.io/react-native/)
+
+## 📱 Projeto
+
+O wallet é um app para controlar melhor os seus gastos, onde pode ser adicionado os ganhos e gastos e ve-los com graficos.💸
 
 Para iniciar o projeto:
 
@@ -27,10 +31,6 @@ ou
 ```
 npm install
 ```
-
-## 📱 Projeto
-
-O wallet é um app para controlar melhor os seus gastos, onde pode ser adicionado os ganhos e gastos e ve-los com graficos.💸
 
 ## 🔖 Layout
 
