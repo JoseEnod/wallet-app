@@ -6,12 +6,10 @@
 
 <br>
 
-.readme #imgMid {margin-right: 5%; margin-left: 5%;}
-
 <p align="center">
-  <img alt="Open App" src=".github/open.gif" width="27%">
-  <img id="imgMid" alt="Add" src=".github/add_gasto.gif" width="27%">
-  <img alt="Geral app" src=".github/list.gif" width="27%">
+  <img alt="Open App" src=".github/open.gif" width="27%"> 
+  <img id="imgMid" alt="Add" src=".github/add_gasto.gif" width="27%"> 
+   <img alt="Geral app" src=".github/list.gif" width="27%">
 </p>
 
 ## 🚀 Tecnologias
