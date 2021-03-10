@@ -18,6 +18,12 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 
 - [React Native](https://facebook.github.io/react-native/)
 
+## 🔖 Layout
+
+No link abaixo você encontra o layout do projeto mobile:
+
+- [Figma](https://www.figma.com/file/XMTi1CXAcIxMfdDaDPi1j6/Smart-wallet?node-id=0%3A1)
+
 ## 📱 Projeto
 
 O wallet é um app para controlar melhor os seus gastos, onde pode ser adicionado os ganhos e gastos e ve-los com graficos.💸
@@ -31,9 +37,3 @@ ou
 ```
 npm install
 ```
-
-## 🔖 Layout
-
-Nos links abaixo você encontra o layout do projeto mobile:
-
-- [Figma](https://www.figma.com/file/XMTi1CXAcIxMfdDaDPi1j6/Smart-wallet?node-id=0%3A1)
